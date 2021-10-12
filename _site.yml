@@ -1,0 +1,11 @@
+name: "Fatimah Alawad"
+navbar:
+  title: "Diamonds Analysis"
+  left:
+    - text: "Descriptive Statistics"
+      href: index.html
+    - text: "Inferential Statistics"
+      href: about.html
+    - text: "Plots"
+      href: Plots.html
+      
