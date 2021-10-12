@@ -1,0 +1,100 @@
+---
+title: "Diamonds Analysis"
+author: "Fatimah Alawad"
+date: "10/2/2021"
+output: 'rmdformats::readthedown'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load packages
+library(rmdformats)
+library(tidyverse)
+```
+
+
+```{r}
+diamonds
+```
+
+
+# Descriptive Statistics
+
+```{r, results = "asis"}
+library(qwraps2)
+options(qwraps2_markup = "markdown")
+
+
+our_summary1 <-
+  list("price" =
+       list("Average"   = ~ mean(price),
+            "SD"        = ~ sd(price)),
+       "Carat" =
+       list("Average"       = ~ mean(carat),
+            "median"    = ~ median(carat),
+            "SD"       = ~ sd(carat))
+       )
+table_one <- summary_table(diamonds, our_summary1)
+table_one
+```
+
+# Inferential Statistics
+
+```{r}
+
+# lin_model1 <- lm(price ~ ., data = diamonds)
+# 
+# summary(lin_model1)
+
+## From the summary of the linear model we can see that the width and the depth of the diamond are not statistically significant.
+
+
+lin_model <- lm(price ~ carat + cut + color + clarity + x + depth + table, data = diamonds)
+
+summary(lin_model)
+
+## The Adjusted R-squared and the P-value are the same for each model but we will remove the width and the depth because we want the simplest model.
+
+one.way <- aov(lin_model) 
+
+anova_table <- summary.aov(one.way)
+
+anova_table
+
+```
+
+# plots
+
+```{r}
+ggplot(diamonds, aes(carat, price, color = cut)) +
+  geom_point(shape = 16 , alpha = 0.75, position = "jitter" ) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_color_brewer(palette = "Dark2" )+
+  labs(x = "The Carat of the diamond",
+       y = "The Price of the diamond",
+       color = "Diamond's cut"
+       )+
+  theme_classic() +
+  theme(rect = element_blank(),
+        legend.position = c(0.1, 0.9))+
+  NULL
+```
+The plot shows that as the weight of the diamond(carat) increases the price increases. Also, it is increases when the quality of the cut increases if we consider that 1 = Fair, 2 = Good, 3 = Very Good, 4 = Premium, 5 = Ideal.
+
+# What is the average diamond price in each category of cut and color?
+
+```{r}
+diamonds %>% 
+  group_by(cut, color) %>% 
+  summarise(average = mean(price))
+
+ggplot(diamonds, aes(fill = factor(color), price)) +
+  geom_bar(position = "dodge") +
+  NULL
+
+
+```
+
