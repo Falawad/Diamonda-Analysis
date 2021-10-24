@@ -1,4 +1,4 @@
 # Diamonda-Analysis
-Showing my work in diamonds data
+Diamonds data is a  built-in dataset in Rstudio.
 I used Rstudio to do this work.
 https://falawad.github.io/Diamonda-Analysis/Diamonds-Analysis.html
